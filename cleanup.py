@@ -1,10 +1,22 @@
 import os
+import sys
 import time
 from colorama import Fore, Style, init
+
+#Sets the working directory(pyinstaller fix)
+# If running as a bundled executable
+if getattr(sys, 'frozen', False):
+    frozen_dir = os.path.dirname(sys.executable)
+    os.chdir(frozen_dir)
+else:
+    # If running as a script, use the script's directory
+    os.chdir(os.getcwd())
+
 
 # Initialize colorama
 init(autoreset=True)
 
+#Loading animation
 def animate_loading(animation_sequence, duration=1):
     idx = 0
     start_time = time.time()
@@ -33,64 +45,37 @@ def remove_hidden(project_folder):
 
 
 def delete_empty_folders(root):
-    dirList = []
-
+    print(f"{Fore.YELLOW}Deleted the following empty directories:{Style.RESET_ALL}")
     for dirpath, dirnames, filenames in os.walk(root, topdown=False):
         for dirname in dirnames:
             full_path = os.path.join(dirpath, dirname)
             try:
                 if not os.listdir(full_path):
-                    print(f"{Fore.YELLOW}Deleted the following empty directories:{Style.RESET_ALL}")
                     os.rmdir(full_path)
                     print(f"{Fore.GREEN}Deleted empty directory:{Style.RESET_ALL} {full_path}")
             except Exception as e:
                 print(f"{Fore.RED}Error deleting directory:{Style.RESET_ALL} {full_path} {Fore.RED}{Style.BRIGHT}: {Style.RESET_ALL}{e}")
-    
-
-def cleanup(project_folder):
-    print(f"Working in directory: {project_folder}")
-
-    # Collect all directories before the deletion process starts
-    all_directories = []
-    for root, dirs, files in os.walk(project_folder, topdown=False):
-        print(f"Current directory: {root}")
-        print(f"Subdirectories: {dirs}")
-        print(f"Files: {files}")
-        print("--------------------")
-        
-        all_directories.extend(dirs)
-
-    # Reverse the order of directories
-    all_directories.reverse()
-
-    print(f"Directories before deletion: {all_directories}")
-
-    # Start the deletion process
-    for dir_name in all_directories:
-        dir_path = os.path.join(root, dir_name)
-        try:
-            print(f"{Fore.YELLOW}Attempting to delete: {Style.RESET_ALL}{dir_path}")
-            if not os.listdir(dir_path):
-                os.rmdir(dir_path)
-                print(f"{Fore.GREEN}Deleted empty directory:{Style.RESET_ALL} {dir_path}")
-        except Exception as e:
-            print(f"{Fore.RED}Error deleting directory:{Style.RESET_ALL} {dir_path} {Fore.RED}{Style.BRIGHT}: {Style.RESET_ALL}{e}")
 
 if __name__ == "__main__":
     project_folder = os.getcwd()
     print(f"Project folder: {project_folder}")
 
+    check = input("Is this the correct folder? (yes/no): ").lower()
 
-    try:
-        print(f"{Fore.YELLOW} Initializing {Style.RESET_ALL}")
-        animate_loading("|/-\\", duration=5) 
-        time.sleep(5)
-        remove_hidden(project_folder) #Remove the hidden files first
-        delete_empty_folders(project_folder)
-    except Exception as e:
-        print(f"{Fore.RED}Exception during cleanup:{Style.RESET_ALL} {e}")
+    if check == 'yes':
+        try:
+            print(f"{Fore.YELLOW}Initializing {Style.RESET_ALL}")
+            animate_loading("|/-\\", duration=5) 
+            time.sleep(5)
+            remove_hidden(project_folder) #Remove the hidden files first
+            delete_empty_folders(project_folder)
+        except Exception as e:
+            print(f"{Fore.RED}Exception during cleanup:{Style.RESET_ALL} {e}")
 
-    input("Press Enter to exit...")
+        print()
+        input("Press Enter to exit...")
+    else:
+        print("Exiting the program.")
 
 
 
