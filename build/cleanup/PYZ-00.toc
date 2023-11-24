@@ -1,4 +1,4 @@
-('/Users/grjohns/Documents/_Programming/OTVideoProject/build/cleanup/PYZ-00.pyz',
+('/Volumes/GJ working/_Programming/OTVideoProject/build/cleanup/PYZ-00.pyz',
  [('_compat_pickle',
    '/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/_compat_pickle.py',
    'PYMODULE'),

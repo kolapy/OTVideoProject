@@ -35,7 +35,7 @@ def animate_loading(animation_sequence, duration=1):
 def remove_hidden(project_folder):
     try:
         for root, dirs, files in os.walk(project_folder):
-            for filename in ['.gitkeep', '.DS_Store']:
+            for filename in ['.gitkeep', '.DS_Store','._.DS_Store']:
                 file_path = os.path.join(root, filename)
                 if os.path.exists(file_path):
                     os.remove(file_path)
@@ -65,8 +65,7 @@ if __name__ == "__main__":
     if check == 'yes':
         try:
             print(f"{Fore.YELLOW}Initializing {Style.RESET_ALL}")
-            animate_loading("|/-\\", duration=5) 
-            time.sleep(5)
+            animate_loading("|/-\\", duration=5) #Rest to let the system catch up
             remove_hidden(project_folder) #Remove the hidden files first
             delete_empty_folders(project_folder)
         except Exception as e:
